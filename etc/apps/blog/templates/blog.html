@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.is_superuser %}
+        <p>Hello, admin.</p>
+    {% endif %}
+{% endif %}
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+            <h2>Posts</h2>
+            <form action="{% url 'search_posts' %}" method="GET" class="mb-4">
+                <div class="input-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search posts by title">
+                    <button type="submit" class="btn btn-outline-secondary">Search</button>
+                </div>
+            </form><br><br>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for post in post_list %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <a href="{% url 'post_detail' post.id %}" class="stretched-link text-decoration-none text-reset">
+                            <img src="{{ post.img.url }}" class="card-img-top" alt="{{ post.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <p class="card-text">{{ post.description }}</p>
+                                <p class="card-text">Author: {{ post.author }}</p>
+                            </div>
+                        </a>
+                        <div class="card-footer">
+                            <small class="text-muted">Posted on {{ post.date }}</small>
+                            {% if user.is_superuser %}
+                            <form action="{% url 'delete_post' post.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary float-end">Delete</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No posts found.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% load static %}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<header class="p-3 text-bg-dark align-items-center justify-content-center">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url 'posts' %}" class="nav-link px-2 text-secondary">Home</a></li>
+            </ul>
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search_posts' %}" method="GET" role="search">
+                <input type="search" name="q" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
+            </form>
+            {% if user.is_authenticated %}
+                {% csrf_token %}
+            <div>
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark me-2">Logout</button>
+                </form>
+            </div>
+            <div class="text-end">
+                    <div class="dropdown text-end col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if profile.image %}
+                            <img src="{{ profile.image.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                            {% else %}
+                            <img src="{{ 'image_profiles/default/default.jpg' }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'create_post' %}">Create post</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-dark me-2">Login</a>
+                    <a href="{% url 'authView' %}" class="btn btn-outline-dark me-2">Registration</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdownToggle = document.getElementById('dropdownMenuButton');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        function closeDropdown() {
+            dropdownMenu.classList.remove('show');
+            dropdownToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        function handleDocumentClick(event) {
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                closeDropdown();
+            }
+        }
+
+        dropdownToggle.addEventListener('click', function (event) {
+            if (dropdownMenu.classList.contains('show')) {
+                closeDropdown();
+            } else {
+                dropdownMenu.classList.add('show');
+                dropdownToggle.setAttribute('aria-expanded', 'true');
+            }
+            event.stopPropagation();
+        });
+
+        document.addEventListener('click', handleDocumentClick);
+    });
+</script>

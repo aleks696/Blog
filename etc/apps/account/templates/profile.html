@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% csrf_token %}
+<div class="cover-container d-flex w-50 h-100 p-3 mx-auto flex-column">
+    <h1 class="display-4 fst-italic">Profile Page</h1>
+        <div class="row">
+            <div id="profile-details">
+                <img src="{{ profile.image.url }}" alt="Profile Image" width="25%"><br>
+                <div class="form-floating mb-3">
+                    <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
+                </div>
+                <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                <p><strong>Number of Friends:</strong> {{ profile.friends.count }}</p>
+                <button id="edit-button" class="btn btn-primary">Edit</button>
+            </div>
+
+            <div id="profile-form" style="display: none;">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+</div>
+
+<script>
+    document.getElementById('edit-button').addEventListener('click', function () {
+        document.getElementById('profile-details').style.display = 'none';
+        document.getElementById('profile-form').style.display = 'block';
+    });
+</script>
+{% endblock %}

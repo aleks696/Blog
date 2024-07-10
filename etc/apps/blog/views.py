@@ -49,7 +49,7 @@ def edit_post_view(request, pk):
     return render(request, 'edit_post.html', {'form': form, 'post': post})
 
 @login_required
-@require_http_methods(["GET"])
+@require_http_methods(["POST"])
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user.is_superuser or post.author == request.user.username:

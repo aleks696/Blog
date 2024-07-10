@@ -10,6 +10,10 @@
 <body>
     <main>
         {% include 'layouts/navbar.html' %}
+        <script>
+        var sessionEnd = {{ seconds_until_session_end }};
+        var idleEnd = {{ seconds_until_idle_end }};
+        </script>
         {% block content %}
         {% endblock %}
     </main>

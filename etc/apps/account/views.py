@@ -30,6 +30,11 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
+
+    # Check if session time is up
+    if 'AUTO_LOGOUT_MESSAGE' in request.session:
+        messages.info(request, request.session.pop('AUTO_LOGOUT_MESSAGE'))
+
     return render(request, 'login.html', {'form': form})
 
 @login_required

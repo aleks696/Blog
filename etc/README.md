@@ -11,7 +11,9 @@ It's a simple website which allows user to create posts, share some interesting 
 
 ### Functionality
 - Login and Register account
+- Delete an account
 - Update Profile
+- Add or Cancel friends requests 
 - Create & Edit & Delete posts if you are the author or admin
 - Search posts by title
 - Reset your password with email
@@ -36,4 +38,4 @@ __python manage.py runserver__
 - Bootstrap
 
 Note:
-For DataBase user db.sqlite if you want to use another change it in settings!
+For DataBase used db.sqlite, if you want to use another - change it in settings!

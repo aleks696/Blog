@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <img src="{{ profile.image.url }}" alt="Profile Image" width="100">
+    <p>Full Name: {{ profile.full_name }}</p>
+    <p>Phone: {{ profile.phone }}</p>
+    <p>Friends: {{ profile.friends.count }}</p>
+
+    {% if not is_friend and not outgoing_requests %}
+        <form method="post" action="{% url 'send_friend_request' profile.user.username %}">
+            {% csrf_token %}
+            <button type="submit">Add Friend</button>
+        </form>
+    {% elif outgoing_requests %}
+        <p>Friend request sent. Waiting for approval.</p>
+    {% endif %}
+</div>
+{% endblock %}

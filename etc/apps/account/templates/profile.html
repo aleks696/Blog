@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-{% load static %}
-{% csrf_token %}
 <div class="cover-container d-flex w-50 h-100 p-3 mx-auto flex-column">
     <h1 class="display-4 fst-italic">Profile Page</h1>
         <div class="row">
@@ -12,18 +10,65 @@
                 </div>
                 <p><strong>Phone:</strong> {{ profile.phone }}</p>
                 <p><strong>Number of Friends:</strong> {{ profile.friends.count }}</p>
-                <button id="edit-button" class="btn btn-primary">Edit</button>
+                <button id="edit-button" class="btn btn-primary">Edit</button><br>
             </div>
 
-            <div id="profile-form" style="display: none;">
+            <div id="profile-form" style="display: none;"><br>
                 <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+                    {% csrf_token %}<br>
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
+            {% if not is_friend %}
+                <form method="post" action="{% url 'send_friend_request' profile.user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Add Friend</button>
+                </form>
+            {% else %}
+                <form method="post" action="{% url 'remove_friend' profile.user.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove Friend</button>
+                </form>
+            {% endif %}
+            </div>
+
+            <h2>Received Friend Requests</h2>
+            <ul>
+            {% for friend_request in incoming_requests %}
+                <li>
+                    {{ friend_request.sender.username }}
+                    <form method="post" action="{% url 'accept_friend_request' friend_request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Accept</button>
+                    </form>
+                    <form method="post" action="{% url 'decline_friend_request' friend_request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Decline</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <h2>Sent Friend Requests</h2>
+            <ul>
+            {% for friend_request in outgoing_requests %}
+                <li>
+                    {{ friend_request.receiver.username }}
+                    <form method="post" action="{% url 'cancel_friend_request' friend_request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Cancel</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <h2>Account Management</h2>
+            <form method="post" action="{% url 'delete_account' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+            </form>
         </div>
-</div>
 
 <script>
     document.getElementById('edit-button').addEventListener('click', function () {

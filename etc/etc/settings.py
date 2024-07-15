@@ -119,7 +119,7 @@ USE_TZ = True
 
 # Auto Logout
 AUTO_LOGOUT = {
-    'IDLE_TIME': timedelta(minutes=5),
+    'IDLE_TIME': timedelta(minutes=20),
     'SESSION_TIME': timedelta(minutes=30),
     'MESSAGE': 'The session has expired. Please login again to continue.',
     'REDIRECT_TO_LOGIN_IMMEDIATELY': True,

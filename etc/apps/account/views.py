@@ -132,7 +132,7 @@ def password_reset_request(request):
                     email_template_name = "registration/password_reset_email.html"
                     c = {
                         "email": user.email,
-                        'domain': 'localhost:8000', # Change to your domain
+                        'domain': 'localhost:8000',  # Change to your domain
                         'site_name': 'MyBlog',
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
